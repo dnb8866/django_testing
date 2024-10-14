@@ -13,8 +13,7 @@ def test_homepage_news_count(client):
     assert (
         client.get(HOME_URL)
         .context['news_list']
-        .count() ==
-        settings.NEWS_COUNT_ON_HOME_PAGE
+        .count() == settings.NEWS_COUNT_ON_HOME_PAGE
     )
 
 
