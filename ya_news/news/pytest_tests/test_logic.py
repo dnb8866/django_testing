@@ -32,8 +32,7 @@ def test_user_can_create_comment(
     assert Comment.objects.count() == 1
     comment = Comment.objects.get()
     assert (
-        (comment.text, comment.news, comment.author)
-        ==
+        (comment.text, comment.news, comment.author) ==
         (form_data_for_new_comment['text'], one_news, news_author)
     )
 

@@ -3,7 +3,6 @@ from http import HTTPStatus
 import pytest
 from django.urls import reverse
 from pytest_django.asserts import assertRedirects
-from pytest_django.fixtures import client
 
 
 @pytest.mark.django_db
@@ -45,7 +44,10 @@ def test_pages_availability(
 )
 @pytest.mark.parametrize(
     'url',
-    (pytest.lazy_fixture('comment_edit_url'), pytest.lazy_fixture('comment_delete_url'))
+    (
+        pytest.lazy_fixture('comment_edit_url'),
+        pytest.lazy_fixture('comment_delete_url')
+    )
 )
 def test_availability_for_comment_edit_and_delete(
         parametrized_client,

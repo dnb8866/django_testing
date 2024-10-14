@@ -1,7 +1,6 @@
 from http import HTTPStatus
 
 from django.contrib.auth import get_user_model
-from django.template.defaultfilters import title
 from django.test import Client, TestCase
 from django.urls import reverse
 from pytils.translit import slugify
@@ -43,7 +42,11 @@ class TestNoteCreate(AuthorTestCase):
         new_note = Note.objects.get()
         self.assertEqual(
             (new_note.title, new_note.text, new_note.slug),
-            (self.add_note_form_data['title'], self.add_note_form_data['text'], self.add_note_form_data['slug'])
+            (
+                self.add_note_form_data['title'],
+                self.add_note_form_data['text'],
+                self.add_note_form_data['slug']
+            )
         )
 
     def test_anonymous_user_cant_create_note(self):
@@ -76,7 +79,6 @@ class TestNoteCreate(AuthorTestCase):
             errors=(note.slug + WARNING)
         )
         self.assertEqual(Note.objects.count(), 1)
-
 
     def test_empty_slug(self):
         self.add_note_form_data.pop('slug')
@@ -114,7 +116,6 @@ class TestNoteEditDelete(AuthorTestCase):
         }
         cls.url_note_edit = reverse('notes:edit', args=(cls.note.slug,))
         cls.url_note_delete = reverse('notes:delete', args=(cls.note.slug,))
-
 
     def test_author_can_edit_note(self):
         self.assertRedirects(

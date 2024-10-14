@@ -1,6 +1,5 @@
 from http import HTTPStatus
 
-import pytils.translit
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
@@ -24,17 +23,17 @@ class TestRoutes(TestCase):
         cls.note_slug = (cls.note.slug,)
 
     def test_pages_availability(self):
-            urls = (
-                ('notes:home', None),
-                ('users:login', None),
-                ('users:logout', None),
-                ('users:signup', None),
-            )
-            for name, args in urls:
-                with self.subTest(name=name):
-                    url = reverse(name, args=args)
-                    response = self.client.get(url)
-                    self.assertEqual(response.status_code, HTTPStatus.OK)
+        urls = (
+            ('notes:home', None),
+            ('users:login', None),
+            ('users:logout', None),
+            ('users:signup', None),
+        )
+        for name, args in urls:
+            with self.subTest(name=name):
+                url = reverse(name, args=args)
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_pages_availability_for_auth_user(self):
         self.client.force_login(self.reader)

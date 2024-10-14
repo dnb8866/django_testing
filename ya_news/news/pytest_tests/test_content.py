@@ -6,14 +6,14 @@ from news.forms import CommentForm
 
 HOME_URL = reverse('news:home')
 
+
 @pytest.mark.django_db
 @pytest.mark.usefixtures('all_news')
 def test_homepage_news_count(client):
     assert (
         client.get(HOME_URL)
         .context['news_list']
-        .count()
-        ==
+        .count() ==
         settings.NEWS_COUNT_ON_HOME_PAGE
     )
 
