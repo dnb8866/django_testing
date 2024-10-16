@@ -1,35 +1,32 @@
 import pytest
 from django.conf import settings
-from django.urls import reverse
 
 from news.forms import CommentForm
 
-HOME_URL = reverse('news:home')
+pytestmark = pytest.mark.django_db
 
 
-@pytest.mark.django_db
-@pytest.mark.usefixtures('all_news')
-def test_homepage_news_count(client):
+def test_homepage_news_count(client, news_home_url, all_news):
     assert (
-        client.get(HOME_URL)
+        client.get(news_home_url)
         .context['news_list']
         .count() == settings.NEWS_COUNT_ON_HOME_PAGE
     )
 
 
-@pytest.mark.django_db
-@pytest.mark.usefixtures('all_news')
-def test_homepage_news_order(client):
-    response = client.get(HOME_URL)
+def test_homepage_news_order(client, news_home_url, all_news):
+    response = client.get(news_home_url)
     news = response.context['news_list']
     all_dates = [one_news.date for one_news in news]
-    sorted_dates = sorted(all_dates, reverse=True)
-    assert all_dates == sorted_dates
+    assert all_dates == sorted(all_dates, reverse=True)
 
 
-@pytest.mark.django_db
-@pytest.mark.usefixtures('all_comments_for_news')
-def test_comments_order(client, one_news, news_detail_url):
+def test_comments_order(
+        client,
+        one_news,
+        news_detail_url,
+        all_comments_for_news
+):
     response = client.get(news_detail_url)
     assert 'news' in response.context
     news = response.context['news']
@@ -40,7 +37,6 @@ def test_comments_order(client, one_news, news_detail_url):
     assert all_timestamps == sorted(all_timestamps)
 
 
-@pytest.mark.django_db
 def test_anonymous_client_has_no_form(client, news_detail_url):
     assert (
         'form' not in
@@ -54,6 +50,7 @@ def test_authorized_client_has_form(
     news_author_client,
     news_detail_url
 ):
-    response = news_author_client.get(news_detail_url)
-    assert 'form' in response.context
-    assert isinstance(response.context['form'], CommentForm)
+    assert isinstance(
+        news_author_client.get(news_detail_url).context.get('form'),
+        CommentForm
+    )
