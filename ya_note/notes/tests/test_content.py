@@ -1,45 +1,43 @@
-from django.contrib.auth import get_user_model
-from django.test import TestCase
 from django.urls import reverse
 
 from notes.forms import NoteForm
 from notes.models import Note
+from notes.tests.conf import NOTES_LIST_URL, NOTES_ADD_URL, UsersTestCase
 
-User = get_user_model()
 
-
-class TestContent(TestCase):
+class TestContent(UsersTestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.author = User.objects.create(username='Автор')
-        cls.not_author = User.objects.create(username='Не автор')
+        super().setUpTestData()
         cls.note = Note.objects.create(
             title='Заголовок',
             text='Текст',
             author=cls.author
         )
-        cls.note_slug = (cls.note.slug,)
+        cls.notes_edit_url = reverse('notes:edit', args=(cls.note.slug,))
 
-    def test_notes_list_for_different_users(self):
-        params = (
-            (self.author, True),
-            (self.not_author, False)
-        )
-        for user, result in params:
-            self.client.force_login(user)
-            objects = self.client.get(
-                reverse('notes:list')
-            ).context['object_list']
-            self.assertEqual((self.note in objects), result)
+    def test_notes_list_for_author(self):
+        notes = self.author_client.get(
+            NOTES_LIST_URL
+        ).context['object_list']
+        self.assertIn(self.note, notes)
+        note = notes.get(id=self.note.id)
+        self.assertEquals(self.note.text, note.text)
+        self.assertEquals(self.note.author, note.author)
+        self.assertEquals(self.note.title, note.title)
+        self.assertEqual(self.note.slug, note.slug)
+
+    def test_notes_list_for_not_author(self):
+        notes = self.not_author_client.get(
+            NOTES_LIST_URL
+        ).context['object_list']
+        self.assertNotIn(self.note, notes)
 
     def test_pages_contains_form(self):
-        urls = (
-            ('notes:add', None),
-            ('notes:edit', self.note_slug),
-        )
-        self.client.force_login(self.author)
-        for name, args in urls:
-            response = self.client.get(reverse(name, args=args))
-            self.assertIn('form', response.context)
-            self.assertIsInstance(response.context['form'], NoteForm)
+        urls = (NOTES_ADD_URL, self.notes_edit_url)
+        for url in urls:
+            self.assertIsInstance(
+                self.author_client.get(url).context.get('form'),
+                NoteForm
+            )
