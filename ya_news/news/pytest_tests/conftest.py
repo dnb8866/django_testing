@@ -65,12 +65,12 @@ def one_news():
 def all_news():
     today = datetime.today()
     News.objects.bulk_create(
-        [News(
+        News(
             title=f'Новость {index}',
             text='Просто текст.',
             date=today - timedelta(days=index)
         )
-            for index in range(settings.NEWS_COUNT_ON_HOME_PAGE + 1)]
+            for index in range(settings.NEWS_COUNT_ON_HOME_PAGE + 1)
     )
 
 
@@ -112,6 +112,16 @@ def comment_edit_url(comment):
 @pytest.fixture
 def comment_delete_url(comment):
     return reverse('news:delete', args=(comment.id,))
+
+
+@pytest.fixture
+def login_redirect_from_comment_edit_url(users_login_url, comment_edit_url):
+    return f'{users_login_url}?next={comment_edit_url}'
+
+
+@pytest.fixture
+def login_redirect_from_comment_delete_url(users_login_url, comment_delete_url):
+    return f'{users_login_url}?next={comment_delete_url}'
 
 
 @pytest.fixture
