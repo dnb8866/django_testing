@@ -8,9 +8,9 @@ pytestmark = pytest.mark.django_db
 
 def test_homepage_news_count(client, news_home_url, all_news):
     assert (
-            client.get(news_home_url)
-            .context['news_list']
-            .count() == settings.NEWS_COUNT_ON_HOME_PAGE
+        client.get(news_home_url)
+        .context['news_list']
+        .count() == settings.NEWS_COUNT_ON_HOME_PAGE
     )
 
 

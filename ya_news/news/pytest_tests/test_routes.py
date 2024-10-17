@@ -52,7 +52,12 @@ def test_pages_availability(url, params_client, expected_status):
         (COMMENT_DELETE_URL, REDIRECT_COMMENT_DELETE_URL)
     )
 )
-def test_redirect_for_anonymous_client(client, url, users_login_url, expected_redirect_url):
+def test_redirect_for_anonymous_client(
+        client,
+        url,
+        users_login_url,
+        expected_redirect_url
+):
     assertRedirects(
         client.get(url),
         expected_redirect_url

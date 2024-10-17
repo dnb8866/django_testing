@@ -21,7 +21,10 @@ class TestNote(conf.UsersTestCase):
         new_note = (notes_after - notes_before).pop()
         self.assertEqual(new_note.title, self.add_note_form_data['title'])
         self.assertEqual(new_note.text, self.add_note_form_data['text'])
-        self.assertEqual(new_note.slug, slugify(self.add_note_form_data['title']))
+        self.assertEqual(
+            new_note.slug,
+            slugify(self.add_note_form_data['title'])
+        )
         self.assertEqual(new_note.author, self.author)
 
     def test_anonymous_user_cant_create_note(self):

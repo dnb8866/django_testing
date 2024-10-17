@@ -70,7 +70,7 @@ def all_news():
             text='Просто текст.',
             date=today - timedelta(days=index)
         )
-            for index in range(settings.NEWS_COUNT_ON_HOME_PAGE + 1)
+        for index in range(settings.NEWS_COUNT_ON_HOME_PAGE + 1)
     )
 
 
@@ -120,7 +120,10 @@ def login_redirect_from_comment_edit_url(users_login_url, comment_edit_url):
 
 
 @pytest.fixture
-def login_redirect_from_comment_delete_url(users_login_url, comment_delete_url):
+def login_redirect_from_comment_delete_url(
+        users_login_url,
+        comment_delete_url
+):
     return f'{users_login_url}?next={comment_delete_url}'
 
 
