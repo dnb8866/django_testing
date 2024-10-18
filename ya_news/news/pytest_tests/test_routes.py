@@ -16,7 +16,7 @@ REDIRECT_COMMENT_EDIT_URL = pytest.lazy_fixture(
     'login_redirect_from_comment_edit_url'
 )
 REDIRECT_COMMENT_DELETE_URL = pytest.lazy_fixture(
-    'login_redirect_from_comment_delete_url'
+    'login_redirect_to_comment_delete_url'
 )
 
 CLIENT = pytest.lazy_fixture('client')
@@ -55,7 +55,6 @@ def test_pages_availability(url, params_client, expected_status):
 def test_redirect_for_anonymous_client(
         client,
         url,
-        users_login_url,
         expected_redirect_url
 ):
     assertRedirects(

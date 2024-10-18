@@ -5,20 +5,19 @@ from pytils.translit import slugify
 
 from notes.models import Note
 
-NOTE_TITLE = 'Заголовок'
-NOTE_TEXT = 'Текст'
+NOTE_SLUG = slugify('Заголовок')
 NOTES_HOME_URL = reverse('notes:home')
 NOTES_LIST_URL = reverse('notes:list')
 NOTES_ADD_URL = reverse('notes:add')
 NOTES_EDIT_URL = reverse(
     'notes:edit',
-    args=(slugify(NOTE_TITLE),))
+    args=(NOTE_SLUG,))
 NOTES_DELETE_URL = reverse(
     'notes:delete',
-    args=(slugify(NOTE_TITLE),))
+    args=(NOTE_SLUG,))
 NOTES_DETAIL_URL = reverse(
     'notes:detail',
-    args=(slugify(NOTE_TITLE),))
+    args=(NOTE_SLUG,))
 NOTES_SUCCESS_URL = reverse('notes:success')
 USERS_LOGIN_URL = reverse('users:login')
 USERS_LOGOUT_URL = reverse('users:logout')
@@ -43,11 +42,13 @@ class UsersTestCase(TestCase):
         cls.not_author_client = Client()
         cls.not_author_client.force_login(cls.not_author)
         cls.note = Note.objects.create(
-            title=NOTE_TITLE,
-            text=NOTE_TEXT,
-            author=cls.author
+            title='Заголовок',
+            text='Текст',
+            author=cls.author,
+            slug=NOTE_SLUG
         )
-        cls.add_note_form_data = {
+        cls.note_form_data = {
             'title': 'Новая заметка',
             'text': 'Текст заметки',
+            'slug': slugify('Новая заметка')
         }

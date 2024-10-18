@@ -120,7 +120,7 @@ def login_redirect_from_comment_edit_url(users_login_url, comment_edit_url):
 
 
 @pytest.fixture
-def login_redirect_from_comment_delete_url(
+def login_redirect_to_comment_delete_url(
         users_login_url,
         comment_delete_url
 ):

@@ -39,5 +39,5 @@ class TestRoutes(conf.UsersTestCase):
             (conf.NOTES_ADD_URL, conf.REDIRECT_NOTES_ADD_URL)
         )
         for url, redirect_url in urls:
-            with self.subTest(url=url):
+            with self.subTest(url=url, redirect_url=redirect_url):
                 self.assertRedirects(self.client.get(url), redirect_url)

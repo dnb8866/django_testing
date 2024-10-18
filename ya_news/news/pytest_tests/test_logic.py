@@ -8,6 +8,7 @@ from news.models import Comment
 
 FORM_DATA_FOR_COMMENT = {'text': 'Комментарий'}
 FORM_DATA_FOR_UPDATE_COMMENT = {'text': 'Обновленный комментарий'}
+BAD_WORDS_DATA = [{'text': f'Текст, {bad_word}'} for bad_word in BAD_WORDS]
 
 pytestmark = pytest.mark.django_db
 
@@ -41,7 +42,7 @@ def test_user_can_create_comment(
 
 @pytest.mark.parametrize(
     'bad_word',
-    BAD_WORDS
+    BAD_WORDS_DATA
 )
 def test_user_cant_use_bad_words(
     news_author_client,
@@ -51,7 +52,7 @@ def test_user_cant_use_bad_words(
     comment_count_before = Comment.objects.count()
     response = news_author_client.post(
         news_detail_url,
-        data={'text': f'Текст, {bad_word}'}
+        data=bad_word
     )
     assertFormError(
         response,
@@ -59,10 +60,7 @@ def test_user_cant_use_bad_words(
         field='text',
         errors=WARNING
     )
-    assert (
-        Comment.objects.count() - comment_count_before
-        == 0
-    )
+    assert Comment.objects.count() == comment_count_before
 
 
 def test_author_can_delete_comment(
@@ -75,6 +73,7 @@ def test_author_can_delete_comment(
     response = comment_author_client.delete(comment_delete_url)
     assertRedirects(response, url_to_comments)
     assert Comment.objects.count() - comment_count_before == -1
+    assert not Comment.objects.filter(id=comment.id).exists()
 
 
 def test_user_cant_delete_comment_of_another_user(
@@ -85,10 +84,7 @@ def test_user_cant_delete_comment_of_another_user(
     comment_count_before = Comment.objects.count()
     response = news_author_client.delete(comment_delete_url)
     assert response.status_code == HTTPStatus.NOT_FOUND
-    assert (
-        Comment.objects.count() - comment_count_before
-        == 0
-    )
+    assert Comment.objects.count() == comment_count_before
     new_comment = Comment.objects.get(id=comment.id)
     assert new_comment.text == comment.text
     assert new_comment.author == comment.author
