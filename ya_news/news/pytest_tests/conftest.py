@@ -115,7 +115,7 @@ def comment_delete_url(comment):
 
 
 @pytest.fixture
-def login_redirect_from_comment_edit_url(users_login_url, comment_edit_url):
+def login_redirect_to_comment_edit_url(users_login_url, comment_edit_url):
     return f'{users_login_url}?next={comment_edit_url}'
 
 
