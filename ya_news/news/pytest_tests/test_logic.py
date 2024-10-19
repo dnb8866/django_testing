@@ -49,7 +49,7 @@ def test_user_cant_use_bad_words(
     news_detail_url,
     bad_word
 ):
-    comment_count_before = Comment.objects.count()
+    comment = set(Comment.objects.all())
     response = news_author_client.post(
         news_detail_url,
         data=bad_word
@@ -60,7 +60,7 @@ def test_user_cant_use_bad_words(
         field='text',
         errors=WARNING
     )
-    assert Comment.objects.count() == comment_count_before
+    assert set(Comment.objects.all()) == comment
 
 
 def test_author_can_delete_comment(

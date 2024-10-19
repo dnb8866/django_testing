@@ -5,7 +5,7 @@ from pytils.translit import slugify
 
 from notes.models import Note
 
-NOTE_SLUG = slugify('Заголовок')
+NOTE_SLUG = 'zagolovok'
 NOTES_HOME_URL = reverse('notes:home')
 NOTES_LIST_URL = reverse('notes:list')
 NOTES_ADD_URL = reverse('notes:add')
@@ -50,5 +50,5 @@ class UsersTestCase(TestCase):
         cls.note_form_data = {
             'title': 'Новая заметка',
             'text': 'Текст заметки',
-            'slug': slugify('Новая заметка')
+            'slug': 'novaya-zametka'
         }

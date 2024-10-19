@@ -13,7 +13,7 @@ USERS_SIGNUP_URL = pytest.lazy_fixture('users_signup_url')
 COMMENT_EDIT_URL = pytest.lazy_fixture('comment_edit_url')
 COMMENT_DELETE_URL = pytest.lazy_fixture('comment_delete_url')
 REDIRECT_COMMENT_EDIT_URL = pytest.lazy_fixture(
-    'login_redirect_from_comment_edit_url'
+    'login_redirect_to_comment_edit_url'
 )
 REDIRECT_COMMENT_DELETE_URL = pytest.lazy_fixture(
     'login_redirect_to_comment_delete_url'

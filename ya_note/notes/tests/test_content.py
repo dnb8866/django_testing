@@ -24,11 +24,11 @@ class TestContent(conf.UsersTestCase):
         )
 
     def test_pages_contains_form(self):
-        urls = (conf.NOTES_ADD_URL, conf.NOTES_EDIT_URL)
-        for url in urls:
+        for url in (conf.NOTES_ADD_URL, conf.NOTES_EDIT_URL):
             with self.subTest(url=url):
-                response_context = self.author_client.get(url).context
                 self.assertIsInstance(
-                    response_context.get('form'),
+                    self.author_client.get(
+                        url
+                    ).context.get('form'),
                     NoteForm
                 )
